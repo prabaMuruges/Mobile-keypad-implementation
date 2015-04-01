@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cubito Task 2 mobile keypad simulator</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./template.css">
+
+  </head>
+  <body>
+  <script>
+    $(document).ready(function(){
+      jQuery.fn.custom_click = function(name,single_click_callback, double_click_callback, triple_click_callback,fourth_click_callback) {
+      return this.each(function(){
+        var clicks = 0, self = this,longClick=0;
+        jQuery(this).click(function(){
+          clicks++;
+          if (clicks == 1) {
+            setTimeout(function(){
+			if(longClick==0)
+			{
+              if(clicks == 1) {
+                single_click_callback.call(self, name);
+              } else if(clicks == 2) {
+                double_click_callback.call(self,name);
+              } else if(clicks == 3)
+                triple_click_callback.call(self,name);
+                else if(clicks == 4 && (name=='seven' || name=='nine'))
+                fourth_click_callback.call(self,name);
+              clicks = 0;
+			}
+            }, 1500); // After 1.5 s the no of clicks count
+          }
+        }).mouseup(function(){
+		  clearTimeout(pressTimer)
+		}).mousedown(function(){
+		  // If its a long press then global variable is set (which will be checked in onClick event)
+		  pressTimer = window.setTimeout(function() {$('#textbox').val($('#textbox').val()+map[name].charAt(4));longClick=1},1000)
+		});;
+      });
+    }
+	
+	// Numbers reside at 4th position ( for long press )
+    var map={};
+    map['one']='.,! 1';
+    map['two']='abc 2';
+    map['three']='def 3';
+    map['four']='ghi 4';
+    map['five']='jkl 5';
+    map['six']='mno 6';
+    map['seven']='pqrs7';
+    map['eight']='tuv 8';
+    map['nine']='wxyz9';
+	map['dot']='.';
+	map['zero']='0';
+	map['hash']='#';
+
+	// Functions which will be passed as an argument for custom_click (Updates the textbox field)
+    var single_click_callback=function(name){
+      $('#textbox').val($('#textbox').val()+map[name].charAt(0));
+    };
+    var double_click_callback=function(name){
+      $('#textbox').val($('#textbox').val()+map[name].charAt(1));
+    };
+    var triple_click_callback=function(name){
+      $('#textbox').val($('#textbox').val()+map[name].charAt(2));
+    };
+    var fourth_click_callback=function(name){
+      $('#textbox').val($('#textbox').val()+map[name].charAt(3));
+    }
+	
+	// The initialized funtions are called here
+    $('#one').custom_click('one',single_click_callback,double_click_callback,triple_click_callback);
+    $('#two').custom_click('two',single_click_callback,double_click_callback,triple_click_callback);
+    $('#three').custom_click('three',single_click_callback,double_click_callback,triple_click_callback);
+    $('#four').custom_click('four',single_click_callback,double_click_callback,triple_click_callback);
+    $('#five').custom_click('five',single_click_callback,double_click_callback,triple_click_callback);
+    $('#six').custom_click('six',single_click_callback,double_click_callback,triple_click_callback);
+    $('#seven').custom_click('seven',single_click_callback,double_click_callback,triple_click_callback,fourth_click_callback);
+    $('#eight').custom_click('eight',single_click_callback,double_click_callback,triple_click_callback);
+    $('#nine').custom_click('nine',single_click_callback,double_click_callback,triple_click_callback,fourth_click_callback);
+	$('#dot').custom_click('dot',single_click_callback);
+	$('#zero').custom_click('zero', single_click_callback);
+	$('#hash').custom_click('hash',single_click_callback);
+
+  });
+  </script>
+  
+	<!-- div thats holds the keypad-->
+    <div class="row" style="table-layout:auto">
+    </div>
+    <table>
+      <tr><td colspan="3"><input style="width:300px;height:35px" type="text" id="textbox" name="textbox"></td></tr>
+      <tr>
+        <td class="calc-btn"><button class="btn calc-btn" type="button" name="one" id="one" >1 .,!</td>
+        <td class="calc-btn"><button class="btn calc-btn" type="button" name="two" id="two">2 abc</td>
+        <td ><button class="btn calc-btn" type="button" name="three" id="three">3 def</td>
+      </tr>
+      <tr>
+        <td class="calc-btn"><button class="btn calc-btn" type="button" name="four" id="four">4 ghi</td>
+        <td class="calc-btn"><button class="btn calc-btn" type="button" name="five" id="five">5 jkl</td>
+        <td ><button class="btn calc-btn" type="button" name="six" id="six">6 mno</td>
+      </tr>
+      <tr>
+        <td class="calc-btn"><button class="btn calc-btn" type="button" name="seven" id="seven">7 pqrs</td>
+        <td class="calc-btn"><button class="btn calc-btn" type="button" name="eight" id="eight">8 tuv</td>
+        <td ><button class="btn calc-btn" type="button" name="nine" id="nine">9 wxyz</td>
+      </tr>
+      <tr>
+        <td class="calc-btn"><button class="btn calc-btn" type="button" name="dot" id="dot">.</td>
+        <td class="calc-btn"><button class="btn calc-btn" type="button" name="zero" id="zero">0</td>
+        <td ><button class="btn calc-btn" type="button" name="hash" id="hash">#</td>
+      </tr>
+    </table>
+  </body>
+</html>
